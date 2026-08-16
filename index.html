@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalkulator Arbitrase Betting</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #2b2b2b;
+    color: #e5e7eb;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 500px; margin: 0 auto; }
+  h1 {
+    text-align: center;
+    color: #93c5fd;
+    font-size: 22px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .card {
+    background: #1f1f1f;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  label { display: block; font-size: 13px; color: #9ca3af; margin-bottom: 6px; }
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #404040;
+    border-radius: 8px;
+    background: #2b2b2b;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  input:focus { outline: none; border-color: #6b7280; }
+  .row { display: flex; gap: 12px; margin-bottom: 12px; }
+  .row > div { flex: 1; }
+  .outcome { margin-bottom: 12px; }
+  .outcome-row {
+    display: flex; align-items: center; gap: 10px;
+    background: #2b2b2b; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
+  }
+  .outcome-row .label {
+    flex: 1; font-size: 14px; color: #e5e7eb;
+  }
+  .outcome-row .odds-input {
+    width: 80px; flex: none;
+  }
+  .btn {
+    width: 100%; padding: 12px; border: none; border-radius: 8px;
+    font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: #dc2626; color: #fff; }
+  .btn-primary:hover { background: #b91c1c; }
+  .btn-add { background: #374151; color: #d1d5db; margin-top: 8px; font-size: 13px; padding: 8px; }
+  .btn-remove {
+    background: transparent; border: none; color: #9ca3af; cursor: pointer;
+    font-size: 18px; padding: 0 4px;
+  }
+  .btn-remove:hover { color: #ef4444; }
+  .result { margin-top: 16px; }
+  .summary {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 16px; border-radius: 8px; margin-bottom: 12px;
+    font-size: 15px; font-weight: 700;
+  }
+  .summary.profit { background: #14532d; color: #86efac; }
+  .summary.loss { background: #7f1d1d; color: #fca5a5; }
+  .summary.neutral { background: #374151; color: #d1d5db; }
+  .alloc {
+    background: #2b2b2b; padding: 12px; border-radius: 8px; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .alloc .lbl { font-size: 13px; color: #9ca3af; }
+  .alloc .amt { font-size: 16px; font-weight: 700; color: #fff; }
+  .alloc .ret { font-size: 10px; color: #6b7280; margin-top: 2px; }
+  .alloc-info { font-size: 11px; color: #6b7280; margin-top: 4px; }
+  .export-btn {
+    margin-top: 16px; width: 100%; padding: 10px;
+    background: #374151; border: none; border-radius: 8px; color: #fff;
+    cursor: pointer; font-size: 13px; font-weight: 600;
+  }
+  .export-btn:hover { background: #4b5563; }
+  .note {
+    text-align: center; font-size: 12px; color: #6b7280; margin-top: 16px; line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Kalkulator Arbitrase Betting</h1>
+
+  <div class="card">
+    <div class="outcome">
+      <label>Total Modal (Rp)</label>
+      <input type="number" id="total" value="10000000" step="100000">
+    </div>
+
+    <label style="margin-bottom:8px">Daftar Odds</label>
+    <div id="oddsList"></div>
+
+    <button class="btn btn-add" onclick="addOutcome()">+ Tambah Baris</button>
+    <div style="height:8px"></div>
+    <button class="btn btn-primary" onclick="hitung()">HITUNG</button>
+
+    <div class="result" id="result"></div>
+
+    <button class="export-btn" onclick="exportScript()">⬇ Unduh Script (.html)</button>
+  </div>
+
+  <p class="note">
+    Balik modal hanya jika total invers odds (1/odds) &lt; 1.00 (book 100%).<br>
+    Contoh: 1/4.70 + 1/2.83 + 1/2.05 = 1.054 → margin bandar 5.1%, tidak arbitrase.
+  </p>
+</div>
+
+<script>
+let outcomes = [
+  { label: 'Tim Kandang', odds: 4.70 },
+  { label: 'Tim Tandang', odds: 2.83 },
+  { label: 'Tidak ada', odds: 2.05 }
+];
+
+function render() {
+  const list = document.getElementById('oddsList');
+  list.innerHTML = '';
+  outcomes.forEach((o, i) => {
+    const row = document.createElement('div');
+    row.className = 'outcome-row';
+    row.innerHTML = `
+      <input type="text" value="${o.label}" class="label" style="background:transparent;border:1px solid #404040;color:#e5e7eb;padding:8px 10px;border-radius:6px;width:130px;font-size:13px;font-weight:400" oninput="outcomes[${i}].label=this.value">
+      <input type="number" step="0.01" value="${o.odds}" class="odds-input" style="width:80px" oninput="outcomes[${i}].odds=parseFloat(this.value)||0">
+      <button class="btn-remove" onclick="removeOutcome(${i})" title="Hapus">✕</button>
+    `;
+    list.appendChild(row);
+  });
+}
+
+function addOutcome() {
+  outcomes.push({ label: 'Outcome ' + (outcomes.length + 1), odds: 1.9 });
+  render();
+}
+
+function removeOutcome(i) {
+  if (outcomes.length <= 2) { alert('Minimal 2 odds'); return; }
+  outcomes.splice(i, 1);
+  render();
+}
+
+function fmt(n) {
+  return 'Rp ' + n.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+}
+
+function hitung() {
+  const total = parseFloat(document.getElementById('total').value) || 0;
+  const inv = outcomes.map(o => 1 / o.odds);
+  const sumInv = inv.reduce((a, b) => a + b, 0);
+  const pct = sumInv * 100;
+  const arb = sumInv < 1;
+
+  let html = '';
+  const cls = arb ? 'profit' : (sumInv > 1.1 ? 'loss' : 'neutral');
+  const verdict = arb
+    ? `✓ ARBITRASE — Profit ${( (1/sumInv - 1) * 100).toFixed(2)}%`
+    : '✗ Tidak arbitrase — rugi pasti';
+  const returnValue = total * (1 / sumInv);
+  const lossAmt = returnValue - total;
+  const verdictSub = arb
+    ? `Setiap hasil menang → ${fmt(returnValue)}`
+    : `Dapat balik ${fmt(returnValue)} (rugi ${fmt(Math.abs(lossAmt))})`;
+
+  html += `<div class="summary ${cls}">
+    <span>${verdict}</span>
+  </div>
+  <div class="alloc" style="display:block">
+    <div style="display:flex;justify-content:space-between">
+      <span class="lbl" style="font-size:13px">Total invers odds (book)</span>
+      <span style="font-weight:700;color:#fff">${sumInv.toFixed(4)} (${pct.toFixed(1)}%)</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+      <span class="lbl" style="font-size:12px">${verdictSub}</span>
+    </div>
+  </div>
+  <div style="height:8px"></div>`;
+
+  html += `<label style="margin-bottom:6px">Proporsi Taruhan (balik modal)</label>`;
+  outcomes.forEach((o, i) => {
+    proporsi = sumInv > 0 ? (inv[i] / sumInv) * total : 0;
+    potensiKembali = o.odds * proporsi;
+    html += `
+      <div class="alloc">
+        <div>
+          <div class="lbl">${o.label} <span style="color:#6b7280">(${o.odds})</span></div>
+          <div class="alloc-info">balik ${fmt(potensiKembali)}</div>
+        </div>
+        <div class="amt">${fmt(proporsi)}</div>
+      </div>`;
+  });
+
+  document.getElementById('result').innerHTML = html;
+
+  storeResults(); // persist current scenario
+}
+
+function storeResults() {
+  outcomes._total = parseFloat(document.getElementById('total').value) || 0;
+  outcomes._timestamp = new Date().toISOString();
+}
+
+function exportScript() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([ '<!DOCTYPE html>\n' + html ], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'kalkulator-arbitrase.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+render();
+hitung();
+</script>
+</body>
+</html>
