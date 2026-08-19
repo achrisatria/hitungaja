@@ -2,231 +2,581 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kalkulator Arbitrase Betting</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Perhitungan</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #2b2b2b;
-    color: #e5e7eb;
-    min-height: 100vh;
-    padding: 20px;
+  :root{
+    --navy:#1b2a4a;
+    --navy2:#22345c;
+    --blue:#2f6fed;
+    --red:#e0483e;
+    --bg:#eef1f8;
+    --card:#ffffff;
+    --border:#e3e7f0;
+    --text:#1c2333;
+    --muted:#6b7386;
+    --green:#1f9d55;
   }
-  .container { max-width: 500px; margin: 0 auto; }
-  h1 {
-    text-align: center;
-    color: #93c5fd;
-    font-size: 22px;
-    margin-bottom: 20px;
-    letter-spacing: 0.5px;
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:"Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+    background:
+      radial-gradient(1200px 400px at 20% -10%, #dde5fb 0%, transparent 60%),
+      var(--bg);
+    color:var(--text);
+    padding:28px 20px 60px;
   }
-  .card {
-    background: #1f1f1f;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  .wrap{max-width:1100px;margin:0 auto;}
+
+  .page-header{margin-bottom:20px;}
+  h1{font-size:21px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em;}
+  .sub{color:var(--muted);font-size:13px;margin:0;}
+
+  /* ===== Tab navigation ===== */
+  .tabs{
+    display:flex;
+    gap:6px;
+    background:#e4e8f4;
+    padding:5px;
+    border-radius:14px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
   }
-  label { display: block; font-size: 13px; color: #9ca3af; margin-bottom: 6px; }
-  input {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #404040;
-    border-radius: 8px;
-    background: #2b2b2b;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 600;
+  .tab-btn{
+    flex:1 1 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    color:var(--muted);
+    background:transparent;
+    border:none;
+    border-radius:10px;
+    padding:11px 14px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:background .18s ease, color .18s ease, box-shadow .18s ease;
   }
-  input:focus { outline: none; border-color: #6b7280; }
-  .row { display: flex; gap: 12px; margin-bottom: 12px; }
-  .row > div { flex: 1; }
-  .outcome { margin-bottom: 12px; }
-  .outcome-row {
-    display: flex; align-items: center; gap: 10px;
-    background: #2b2b2b; padding: 10px 12px; border-radius: 8px; margin-bottom: 8px;
+  .tab-btn .ico{font-size:15px;line-height:1;}
+  .tab-btn:hover{color:var(--navy);}
+  .tab-btn.active{
+    background:#ffffff;
+    color:var(--navy);
+    box-shadow:0 2px 8px rgba(27,42,74,.12), 0 1px 2px rgba(27,42,74,.08);
   }
-  .outcome-row .label {
-    flex: 1; font-size: 14px; color: #e5e7eb;
+
+  .tab-panel{display:none;animation:fadein .25s ease;}
+  .tab-panel.active{display:block;}
+  @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+  .panel-head{margin-bottom:14px;}
+  .panel-head h2{font-size:16px;margin:0 0 3px;font-weight:800;color:var(--navy);}
+  .panel-head p{margin:0;font-size:12.5px;color:var(--muted);}
+
+  /* ===== Buttons (general) ===== */
+  .toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:14px;
+    flex-wrap:wrap;
   }
-  .outcome-row .odds-input {
-    width: 80px; flex: none;
+  button{
+    font-family:inherit;
+    font-size:13px;
+    font-weight:600;
+    border:none;
+    border-radius:9px;
+    padding:10px 16px;
+    cursor:pointer;
+    transition:filter .15s ease, transform .1s ease;
   }
-  .btn {
-    width: 100%; padding: 12px; border: none; border-radius: 8px;
-    font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s;
+  button:active{transform:translateY(1px);}
+  button:hover{filter:brightness(1.08);}
+  .btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(47,111,237,.28);}
+  .btn-ghost{background:#fff;color:var(--navy);border:1px solid var(--border);}
+
+  /* ===== Kotor/Bersih table ===== */
+  .card{
+    background:var(--card);
+    border-radius:16px;
+    box-shadow:0 1px 3px rgba(20,25,50,.06),0 10px 28px rgba(20,25,50,.06);
+    overflow:hidden;
+    border:1px solid var(--border);
   }
-  .btn-primary { background: #dc2626; color: #fff; }
-  .btn-primary:hover { background: #b91c1c; }
-  .btn-add { background: #374151; color: #d1d5db; margin-top: 8px; font-size: 13px; padding: 8px; }
-  .btn-remove {
-    background: transparent; border: none; color: #9ca3af; cursor: pointer;
-    font-size: 18px; padding: 0 4px;
+  .table-scroll{overflow-x:hidden;}
+  table{border-collapse:collapse;width:100%;table-layout:fixed;}
+  col{width:16.6667%;}
+  thead th{
+    background:var(--navy);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.02em;
+    text-align:center;
+    padding:13px 6px;
+    white-space:normal;
+    word-break:break-word;
+    overflow-wrap:break-word;
   }
-  .btn-remove:hover { color: #ef4444; }
-  .result { margin-top: 16px; }
-  .summary {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 14px 16px; border-radius: 8px; margin-bottom: 12px;
-    font-size: 15px; font-weight: 700;
+  tbody td{
+    padding:11px 6px;
+    text-align:center;
+    font-size:13px;
+    border-bottom:1px solid var(--border);
+    white-space:normal;
+    word-break:break-word;
+    overflow-wrap:break-word;
   }
-  .summary.profit { background: #14532d; color: #86efac; }
-  .summary.loss { background: #7f1d1d; color: #fca5a5; }
-  .summary.neutral { background: #374151; color: #d1d5db; }
-  .alloc {
-    background: #2b2b2b; padding: 12px; border-radius: 8px; margin-bottom: 8px;
-    display: flex; justify-content: space-between; align-items: center;
+  tbody tr:nth-child(even){background:#f8f9fd;}
+  tbody tr:hover{background:#eef2fb;}
+  td.no-cell{color:var(--red);font-weight:700;}
+  input.cell-input{
+    width:100%;
+    max-width:100%;
+    padding:8px 6px;
+    border:1px solid var(--border);
+    border-radius:7px;
+    font-size:13px;
+    text-align:right;
+    font-family:inherit;
+    background:#fbfcfe;
   }
-  .alloc .lbl { font-size: 13px; color: #9ca3af; }
-  .alloc .amt { font-size: 16px; font-weight: 700; color: #fff; }
-  .alloc .ret { font-size: 10px; color: #6b7280; margin-top: 2px; }
-  .alloc-info { font-size: 11px; color: #6b7280; margin-top: 4px; }
-  .export-btn {
-    margin-top: 16px; width: 100%; padding: 10px;
-    background: #374151; border: none; border-radius: 8px; color: #fff;
-    cursor: pointer; font-size: 13px; font-weight: 600;
+  input.cell-input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);background:#fff;}
+  .val-satuan{color:var(--blue);font-weight:600;}
+  .val-kotor{color:var(--blue);font-weight:700;}
+  .val-bersih{color:var(--green);font-weight:700;}
+
+  .toggle-wrap{
+    font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px;
   }
-  .export-btn:hover { background: #4b5563; }
-  .note {
-    text-align: center; font-size: 12px; color: #6b7280; margin-top: 16px; line-height: 1.5;
+  .toggle-wrap input{width:auto;}
+
+  /* ===== Angka Acak ===== */
+  .rw-card{
+    text-align:center;
+    padding:52px 32px;
+    border:1px solid var(--border);
+    border-radius:16px;
+    background:
+      radial-gradient(600px 260px at 50% -20%, #dde5fb 0%, transparent 60%),
+      var(--card);
+    box-shadow:0 1px 3px rgba(20,25,50,.06),0 10px 28px rgba(20,25,50,.06);
+  }
+  .rw-card .rw-label{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);}
+  .rw-card .rw-num{font-size:104px;font-weight:200;line-height:1;margin:26px 0;font-variant-numeric:tabular-nums;color:var(--navy);}
+  .rw-card .rw-btn{
+    padding:15px 44px;border:0;border-radius:999px;background:var(--blue);color:#fff;
+    font-size:15px;letter-spacing:.05em;cursor:pointer;font-weight:700;
+    box-shadow:0 4px 12px rgba(47,111,237,.28);
+    transition:transform .2s ease,opacity .2s ease;
+  }
+  .rw-card .rw-btn:hover{transform:translateY(-2px);filter:none;}
+  .rw-card .rw-btn:disabled{opacity:.6;cursor:default;transform:none;}
+
+  /* ===== Arbitrase Betting ===== */
+  .arb-widget{
+    background:var(--card);
+    color:var(--text);
+    border-radius:16px;
+    padding:24px;
+    border:1px solid var(--border);
+    box-shadow:0 1px 3px rgba(20,25,50,.06),0 10px 28px rgba(20,25,50,.06);
+  }
+  .arb-widget .arb-container{max-width:520px;margin:0 auto;}
+  .arb-widget h2{
+    text-align:center;color:var(--navy);font-size:19px;margin-bottom:18px;letter-spacing:.5px;font-weight:800;
+  }
+  .arb-widget .arb-card{background:var(--bg);border-radius:14px;padding:20px;margin-bottom:16px;border:1px solid var(--border);}
+  .arb-widget label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
+  .arb-widget input{
+    width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:9px;
+    background:#fbfcfe;color:var(--text);font-size:15px;font-weight:600;font-family:inherit;
+  }
+  .arb-widget input:focus{outline:none;border-color:var(--blue);background:#fff;}
+  .arb-widget .arb-outcome{margin-bottom:12px;}
+  .arb-widget .arb-outcome-row{
+    display:flex;align-items:center;gap:10px;background:var(--card);padding:10px 12px;
+    border-radius:9px;margin-bottom:8px;border:1px solid var(--border);
+    flex-wrap:wrap;
+  }
+  .arb-widget .arb-outcome-row .arb-label{flex:1 1 120px;min-width:0;font-size:14px;color:var(--text);}
+  .arb-widget .arb-outcome-row .arb-odds-input{width:78px;flex:0 0 78px;}
+  .arb-widget .arb-btn{
+    width:100%;padding:12px;border:none;border-radius:9px;font-size:15px;font-weight:700;
+    cursor:pointer;transition:all .2s;font-family:inherit;
+  }
+  .arb-widget .arb-btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(47,111,237,.28);}
+  .arb-widget .arb-btn-primary:hover{filter:brightness(1.08);}
+  .arb-widget .arb-btn-add{background:#fff;color:var(--navy);border:1px solid var(--border);margin-top:8px;font-size:13px;padding:9px;}
+  .arb-widget .arb-btn-remove{
+    background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;
+  }
+  .arb-widget .arb-btn-remove:hover{color:var(--red);}
+  .arb-widget .arb-result{margin-top:16px;}
+  .arb-widget .arb-summary{
+    display:flex;justify-content:space-between;align-items:center;padding:14px 16px;
+    border-radius:9px;margin-bottom:12px;font-size:15px;font-weight:700;
+  }
+  .arb-widget .arb-summary.profit{background:#e7f7ee;color:var(--green);}
+  .arb-widget .arb-summary.loss{background:#fdecea;color:var(--red);}
+  .arb-widget .arb-summary.neutral{background:var(--bg);color:var(--muted);}
+  .arb-widget .arb-alloc{
+    background:var(--bg);padding:12px;border-radius:9px;margin-bottom:8px;
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;
+    border:1px solid var(--border);
+  }
+  .arb-widget .arb-alloc .arb-lbl{font-size:13px;color:var(--muted);}
+  .arb-widget .arb-alloc .arb-amt{font-size:16px;font-weight:700;color:var(--navy);}
+  .arb-widget .arb-alloc-info{font-size:11px;color:var(--muted);margin-top:4px;}
+  .arb-widget .arb-export-btn{
+    margin-top:16px;width:100%;padding:10px;background:#fff;border:1px solid var(--border);border-radius:9px;
+    color:var(--navy);cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;
+  }
+  .arb-widget .arb-export-btn:hover{background:var(--bg);}
+  .arb-widget .arb-note{text-align:center;font-size:12px;color:var(--muted);margin-top:16px;line-height:1.5;}
+
+  @media (max-width: 768px){
+    body{padding:16px 10px 40px;}
+    h1{font-size:17px;}
+    .sub{font-size:12px;}
+    .tab-btn{font-size:12px;padding:10px 8px;}
+    .tab-btn .txt{display:none;}
+    .toolbar{gap:8px;}
+    button{padding:8px 10px;font-size:12px;flex:1 1 auto;}
+    thead th{font-size:10px;padding:8px 4px;}
+    tbody td{font-size:11px;padding:8px 4px;}
+    input.cell-input{font-size:11px;padding:6px 3px;}
+    .rw-card{padding:40px 20px;}
+    .rw-card .rw-num{font-size:76px;}
+    .arb-widget{padding:16px;border-radius:14px;}
+    .arb-widget .arb-card{padding:14px;}
+    .arb-widget .arb-outcome-row .arb-label{flex-basis:100%;order:-1;}
+    .arb-widget .arb-outcome-row .arb-odds-input{flex:1 1 auto;}
+  }
+
+  @media (max-width: 480px){
+    thead th{font-size:9.5px;padding:7px 3px;}
+    tbody td{font-size:10px;padding:7px 3px;}
+    input.cell-input{font-size:10px;padding:5px 2px;}
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <h1>Kalkulator Arbitrase Betting</h1>
-
-  <div class="card">
-    <div class="outcome">
-      <label>Total Modal (Rp)</label>
-      <input type="number" id="total" value="10000000" step="100000">
-    </div>
-
-    <label style="margin-bottom:8px">Daftar Odds</label>
-    <div id="oddsList"></div>
-
-    <button class="btn btn-add" onclick="addOutcome()">+ Tambah Baris</button>
-    <div style="height:8px"></div>
-    <button class="btn btn-primary" onclick="hitung()">HITUNG</button>
-
-    <div class="result" id="result"></div>
-
-    <button class="export-btn" onclick="exportScript()">⬇ Unduh Script (.html)</button>
+<div class="wrap">
+  <div class="page-header">
+    <h1>Dashboard Perhitungan</h1>
+    <p class="sub">Pilih menu di bawah untuk berpindah antar kalkulator.</p>
   </div>
 
-  <p class="note">
-    Balik modal hanya jika total invers odds (1/odds) &lt; 1.00 (book 100%).<br>
-    Contoh: 1/4.70 + 1/2.83 + 1/2.05 = 1.054 → margin bandar 5.1%, tidak arbitrase.
-  </p>
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="panel-kotor"><span class="ico">📊</span><span class="txt">Kotor / Bersih</span></button>
+    <button class="tab-btn" data-tab="panel-acak"><span class="ico">🎲</span><span class="txt">Angka Acak</span></button>
+    <button class="tab-btn" data-tab="panel-arb"><span class="ico">⚖️</span><span class="txt">Arbitrase Betting</span></button>
+  </nav>
+
+  <section id="panel-kotor" class="tab-panel active">
+    <div class="panel-head">
+      <h2>Perhitungan Kotor / Bersih</h2>
+      <p>Input Nominal &amp; Input Perkalian diisi manual. Kolom lain terhitung otomatis.</p>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn-primary" id="addRow">+ Tambah Baris</button>
+      <button class="btn-ghost" id="resetRows">Reset ke 4 Baris</button>
+      <span style="flex:1"></span>
+      <label class="toggle-wrap">
+        <input type="checkbox" id="rupiahToggle" checked>
+        Format Rupiah
+      </label>
+    </div>
+
+    <div class="card">
+      <div class="table-scroll">
+        <table>
+          <colgroup>
+            <col><col><col><col><col><col>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Input Nominal</th>
+              <th>Input Perkalian</th>
+              <th>Input Satuan</th>
+              <th>Hasil Kotor</th>
+              <th>Hasil Bersih</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="panel-acak" class="tab-panel">
+    <div class="panel-head">
+      <h2>Generator Angka Acak</h2>
+      <p>Menghasilkan satu angka acak antara 1 sampai 15.</p>
+    </div>
+    <div class="rw-card">
+      <p class="rw-label">Angka Acak 1 - 15</p>
+      <div class="rw-num" id="rwNum">-</div>
+      <button class="rw-btn" id="rwBtn">MULAI</button>
+    </div>
+  </section>
+
+  <section id="panel-arb" class="tab-panel">
+    <div class="panel-head">
+      <h2>Kalkulator Arbitrase Betting</h2>
+      <p>Hitung proporsi taruhan berdasarkan odds untuk mengecek peluang arbitrase.</p>
+    </div>
+    <div class="arb-widget">
+      <div class="arb-container">
+        <div class="arb-card">
+          <div class="arb-outcome">
+            <label>Total Modal (Rp)</label>
+            <input type="number" id="arbTotal" value="10000000" step="100000">
+          </div>
+          <label style="margin-bottom:8px">Daftar Odds</label>
+          <div id="arbOddsList"></div>
+          <button class="arb-btn arb-btn-add" id="arbAddBtn">+ Tambah Baris</button>
+          <div style="height:8px"></div>
+          <button class="arb-btn arb-btn-primary" id="arbHitungBtn">HITUNG</button>
+          <div class="arb-result" id="arbResult"></div>
+          <button class="arb-export-btn" id="arbExportBtn">⬇ Unduh Script (.html)</button>
+        </div>
+        <p class="arb-note">
+          Balik modal hanya jika total invers odds (1/odds) &lt; 1.00 (book 100%).<br>
+          Contoh: 1/4.70 + 1/2.83 + 1/2.05 = 1.054 → margin bandar 5.1%, tidak arbitrase.
+        </p>
+      </div>
+    </div>
+  </section>
 </div>
 
 <script>
-let outcomes = [
+/* ===== Tab switching ===== */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+/* ===== Kotor / Bersih ===== */
+let rows = [
+  { nominal: 0, perkalian: 0 },
+  { nominal: 0, perkalian: 0 },
+  { nominal: 0, perkalian: 0 },
+  { nominal: 0, perkalian: 0 },
+];
+
+const tbody = document.getElementById('tbody');
+const rupiahToggle = document.getElementById('rupiahToggle');
+
+function fmt(n){
+  if(isNaN(n)) n = 0;
+  if(rupiahToggle.checked){
+    return 'Rp ' + Math.round(n).toLocaleString('id-ID');
+  }
+  return Number(n.toFixed(2)).toLocaleString('id-ID');
+}
+
+function computeAll(){
+  let cumNominal = 0;
+  return rows.map(r => {
+    const nominal = Number(r.nominal) || 0;
+    cumNominal += nominal;
+    const satuan = nominal / 4;
+    const kotor = nominal * (Number(r.perkalian) || 0);
+    const bersih = kotor - cumNominal;
+    return { satuan, kotor, bersih };
+  });
+}
+
+function updateComputed(){
+  const results = computeAll();
+  const trs = tbody.querySelectorAll('tr');
+  results.forEach((res, i) => {
+    const tds = trs[i].querySelectorAll('td');
+    tds[3].textContent = fmt(res.satuan);
+    tds[4].textContent = fmt(res.kotor);
+    tds[5].textContent = fmt(res.bersih);
+  });
+}
+
+function render(){
+  tbody.innerHTML = '';
+
+  rows.forEach((r, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="no-cell" data-label="No">${i + 1}</td>
+      <td data-label="Input Nominal"><input class="cell-input" type="text" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="nominal" value="${r.nominal}"></td>
+      <td data-label="Input Perkalian"><input class="cell-input" type="text" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="perkalian" value="${r.perkalian}"></td>
+      <td class="val-satuan" data-label="Input Satuan"></td>
+      <td class="val-kotor" data-label="Hasil Kotor"></td>
+      <td class="val-bersih" data-label="Hasil Bersih"></td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  tbody.querySelectorAll('input.cell-input').forEach(inp => {
+    inp.addEventListener('input', e => {
+      let raw = e.target.value.replace(/[^0-9.,-]/g, '');
+      raw = raw.replace(',', '.');
+      const caret = e.target.selectionStart;
+      e.target.value = raw;
+      e.target.setSelectionRange(caret, caret);
+      const idx = Number(e.target.dataset.idx);
+      const field = e.target.dataset.field;
+      rows[idx][field] = parseFloat(raw) || 0;
+      updateComputed();
+    });
+    inp.addEventListener('wheel', e => e.target.blur());
+  });
+
+  updateComputed();
+}
+
+document.getElementById('addRow').addEventListener('click', () => {
+  rows.push({ nominal: 0, perkalian: 0 });
+  render();
+});
+
+document.getElementById('resetRows').addEventListener('click', () => {
+  rows = [
+    { nominal: 0, perkalian: 0 },
+    { nominal: 0, perkalian: 0 },
+    { nominal: 0, perkalian: 0 },
+    { nominal: 0, perkalian: 0 },
+  ];
+  render();
+});
+
+rupiahToggle.addEventListener('change', render);
+
+render();
+
+/* ===== Angka Acak ===== */
+const rwBtn = document.getElementById('rwBtn');
+const rwNum = document.getElementById('rwNum');
+function rwSecureRandom(){
+  const arr = new Uint32Array(1);
+  crypto.getRandomValues(arr);
+  return (arr[0] % 15) + 1;
+}
+rwBtn.addEventListener('click', () => {
+  rwBtn.disabled = true;
+  let ticks = 0;
+  const timer = setInterval(() => {
+    rwNum.textContent = rwSecureRandom();
+    if(++ticks > 14){ clearInterval(timer); rwBtn.disabled = false; }
+  }, 60);
+});
+
+/* ===== Arbitrase Betting ===== */
+let arbOutcomes = [
   { label: 'Tim Kandang', odds: 4.70 },
   { label: 'Tim Tandang', odds: 2.83 },
   { label: 'Tidak ada', odds: 2.05 }
 ];
-
-function render() {
-  const list = document.getElementById('oddsList');
+function arbRenderOutcomes(){
+  const list = document.getElementById('arbOddsList');
   list.innerHTML = '';
-  outcomes.forEach((o, i) => {
+  arbOutcomes.forEach((o, i) => {
     const row = document.createElement('div');
-    row.className = 'outcome-row';
+    row.className = 'arb-outcome-row';
     row.innerHTML = `
-      <input type="text" value="${o.label}" class="label" style="background:transparent;border:1px solid #404040;color:#e5e7eb;padding:8px 10px;border-radius:6px;width:130px;font-size:13px;font-weight:400" oninput="outcomes[${i}].label=this.value">
-      <input type="number" step="0.01" value="${o.odds}" class="odds-input" style="width:80px" oninput="outcomes[${i}].odds=parseFloat(this.value)||0">
-      <button class="btn-remove" onclick="removeOutcome(${i})" title="Hapus">✕</button>
+      <input type="text" value="${o.label}" class="arb-label" style="padding:8px 10px;border-radius:6px;font-size:13px;font-weight:400;min-width:110px;">
+      <input type="number" step="0.01" value="${o.odds}" class="arb-odds-input">
+      <button class="arb-btn-remove" title="Hapus">✕</button>
     `;
+    const [labelInput, oddsInput] = row.querySelectorAll('input');
+    labelInput.addEventListener('input', e => arbOutcomes[i].label = e.target.value);
+    oddsInput.addEventListener('input', e => arbOutcomes[i].odds = parseFloat(e.target.value) || 0);
+    row.querySelector('.arb-btn-remove').addEventListener('click', () => arbRemoveOutcome(i));
     list.appendChild(row);
   });
 }
-
-function addOutcome() {
-  outcomes.push({ label: 'Outcome ' + (outcomes.length + 1), odds: 1.9 });
-  render();
+function arbAddOutcome(){
+  arbOutcomes.push({ label: 'Outcome ' + (arbOutcomes.length + 1), odds: 1.9 });
+  arbRenderOutcomes();
 }
-
-function removeOutcome(i) {
-  if (outcomes.length <= 2) { alert('Minimal 2 odds'); return; }
-  outcomes.splice(i, 1);
-  render();
+function arbRemoveOutcome(i){
+  if(arbOutcomes.length <= 2){ alert('Minimal 2 odds'); return; }
+  arbOutcomes.splice(i, 1);
+  arbRenderOutcomes();
 }
-
-function fmt(n) {
+function arbFmt(n){
   return 'Rp ' + n.toLocaleString('id-ID', { maximumFractionDigits: 0 });
 }
-
-function hitung() {
-  const total = parseFloat(document.getElementById('total').value) || 0;
-  const inv = outcomes.map(o => 1 / o.odds);
+function arbHitung(){
+  const total = parseFloat(document.getElementById('arbTotal').value) || 0;
+  const inv = arbOutcomes.map(o => 1 / o.odds);
   const sumInv = inv.reduce((a, b) => a + b, 0);
   const pct = sumInv * 100;
   const arb = sumInv < 1;
-
   let html = '';
   const cls = arb ? 'profit' : (sumInv > 1.1 ? 'loss' : 'neutral');
   const verdict = arb
-    ? `✓ ARBITRASE — Profit ${( (1/sumInv - 1) * 100).toFixed(2)}%`
+    ? `✓ ARBITRASE — Profit ${((1 / sumInv - 1) * 100).toFixed(2)}%`
     : '✗ Tidak arbitrase — rugi pasti';
   const returnValue = total * (1 / sumInv);
   const lossAmt = returnValue - total;
   const verdictSub = arb
-    ? `Setiap hasil menang → ${fmt(returnValue)}`
-    : `Dapat balik ${fmt(returnValue)} (rugi ${fmt(Math.abs(lossAmt))})`;
-
-  html += `<div class="summary ${cls}">
+    ? `Setiap hasil menang → ${arbFmt(returnValue)}`
+    : `Dapat balik ${arbFmt(returnValue)} (rugi ${arbFmt(Math.abs(lossAmt))})`;
+  html += `<div class="arb-summary ${cls}">
     <span>${verdict}</span>
   </div>
-  <div class="alloc" style="display:block">
+  <div class="arb-alloc" style="display:block">
     <div style="display:flex;justify-content:space-between">
-      <span class="lbl" style="font-size:13px">Total invers odds (book)</span>
+      <span class="arb-lbl" style="font-size:13px">Total invers odds (book)</span>
       <span style="font-weight:700;color:#fff">${sumInv.toFixed(4)} (${pct.toFixed(1)}%)</span>
     </div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-      <span class="lbl" style="font-size:12px">${verdictSub}</span>
+      <span class="arb-lbl" style="font-size:12px">${verdictSub}</span>
     </div>
   </div>
   <div style="height:8px"></div>`;
-
   html += `<label style="margin-bottom:6px">Proporsi Taruhan (balik modal)</label>`;
-  outcomes.forEach((o, i) => {
-    proporsi = sumInv > 0 ? (inv[i] / sumInv) * total : 0;
-    potensiKembali = o.odds * proporsi;
+  arbOutcomes.forEach((o, i) => {
+    const proporsi = sumInv > 0 ? (inv[i] / sumInv) * total : 0;
+    const potensiKembali = o.odds * proporsi;
     html += `
-      <div class="alloc">
+      <div class="arb-alloc">
         <div>
-          <div class="lbl">${o.label} <span style="color:#6b7280">(${o.odds})</span></div>
-          <div class="alloc-info">balik ${fmt(potensiKembali)}</div>
+          <div class="arb-lbl">${o.label} <span style="color:#6b7280">(${o.odds})</span></div>
+          <div class="arb-alloc-info">balik ${arbFmt(potensiKembali)}</div>
         </div>
-        <div class="amt">${fmt(proporsi)}</div>
+        <div class="arb-amt">${arbFmt(proporsi)}</div>
       </div>`;
   });
-
-  document.getElementById('result').innerHTML = html;
-
-  storeResults(); // persist current scenario
+  document.getElementById('arbResult').innerHTML = html;
 }
-
-function storeResults() {
-  outcomes._total = parseFloat(document.getElementById('total').value) || 0;
-  outcomes._timestamp = new Date().toISOString();
-}
-
-function exportScript() {
+function arbExportScript(){
   const html = document.documentElement.outerHTML;
-  const blob = new Blob([ '<!DOCTYPE html>\n' + html ], { type: 'text/html' });
+  const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'kalkulator-arbitrase.html';
+  a.download = 'dashboard-kotor-bersih.html';
   a.click();
   URL.revokeObjectURL(url);
 }
+document.getElementById('arbAddBtn').addEventListener('click', arbAddOutcome);
+document.getElementById('arbHitungBtn').addEventListener('click', arbHitung);
+document.getElementById('arbExportBtn').addEventListener('click', arbExportScript);
 
-render();
-hitung();
+arbRenderOutcomes();
+arbHitung();
 </script>
 </body>
 </html>
