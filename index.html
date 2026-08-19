@@ -228,8 +228,6 @@
     thead th{font-size:9.5px;padding:7px 3px;}
     tbody td{font-size:10px;padding:7px 3px;}
     input.cell-input{font-size:10px;padding:5px 2px;}
-    col.arb-invers{visibility:collapse;}
-    th.arb-invers, td.arb-invers{display:none;}
     .row-del{font-size:14px;padding:4px 6px;}
   }
 </style>
@@ -314,15 +312,14 @@
       <div class="table-scroll">
         <table>
           <colgroup>
-            <col style="width:6%"><col style="width:26%"><col style="width:12%">
-            <col style="width:16%" class="arb-invers"><col style="width:20%"><col style="width:14%"><col style="width:6%">
+            <col style="width:8%"><col style="width:28%"><col style="width:14%">
+            <col style="width:24%"><col style="width:20%"><col style="width:6%">
           </colgroup>
           <thead>
             <tr>
               <th>No</th>
               <th>Nama Outcome</th>
               <th>Odds</th>
-              <th class="arb-invers">Invers (1/Odds)</th>
               <th>Proporsi Taruhan</th>
               <th>Potensi Balik</th>
               <th></th>
@@ -467,9 +464,9 @@ rwBtn.addEventListener('click', () => {
 
 /* ===== Arbitrase Betting (tabel, menyerupai Kotor/Bersih) ===== */
 let arbOutcomes = [
-  { label: 'Outcome 1', odds: 4.70 },
-  { label: 'Outcome 2', odds: 2.83 },
-  { label: 'Outcome 3', odds: 2.05 }
+  { label: 'Tim Kandang', odds: 4.70 },
+  { label: 'Tim Tandang', odds: 2.83 },
+  { label: 'Tidak ada', odds: 2.05 }
 ];
 let arbTotal = 10000000;
 
@@ -506,9 +503,8 @@ function arbUpdateComputed(){
   const trs = arbTbody.querySelectorAll('tr');
   rows.forEach((res, i) => {
     const tds = trs[i].querySelectorAll('td');
-    tds[3].textContent = res.invers.toFixed(4);
-    tds[4].textContent = arbFmt(res.proporsi);
-    tds[5].textContent = arbFmt(res.potensiBalik);
+    tds[3].textContent = arbFmt(res.proporsi);
+    tds[4].textContent = arbFmt(res.potensiBalik);
   });
 
   const pct = sumInv * 100;
@@ -538,7 +534,6 @@ function arbRenderRows(){
       <td class="no-cell" data-label="No">${i + 1}</td>
       <td data-label="Nama Outcome"><input class="cell-input text-center" type="text" autocomplete="off" data-idx="${i}" data-field="label" value="${o.label}"></td>
       <td data-label="Odds"><input class="cell-input" type="text" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="odds" value="${o.odds}"></td>
-      <td class="val-satuan arb-invers" data-label="Invers (1/Odds)"></td>
       <td class="val-kotor" data-label="Proporsi Taruhan"></td>
       <td class="val-bersih" data-label="Potensi Balik"></td>
       <td><button class="row-del" type="button" title="Hapus baris">✕</button></td>
