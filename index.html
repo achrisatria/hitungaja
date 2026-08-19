@@ -178,67 +178,33 @@
   .rw-card .rw-btn:hover{transform:translateY(-2px);filter:none;}
   .rw-card .rw-btn:disabled{opacity:.6;cursor:default;transform:none;}
 
-  /* ===== Arbitrase Betting ===== */
-  .arb-widget{
-    background:var(--card);
-    color:var(--text);
-    border-radius:16px;
-    padding:24px;
-    border:1px solid var(--border);
-    box-shadow:0 1px 3px rgba(20,25,50,.06),0 10px 28px rgba(20,25,50,.06);
+  /* ===== Arbitrase Betting (menyerupai tabel Kotor/Bersih) ===== */
+  .field-total{
+    display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:600;
   }
-  .arb-widget .arb-container{max-width:520px;margin:0 auto;}
-  .arb-widget h2{
-    text-align:center;color:var(--navy);font-size:19px;margin-bottom:18px;letter-spacing:.5px;font-weight:800;
+  .field-total input{
+    width:170px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;
+    font-size:13px;text-align:right;font-family:inherit;background:#fbfcfe;
   }
-  .arb-widget .arb-card{background:var(--bg);border-radius:14px;padding:20px;margin-bottom:16px;border:1px solid var(--border);}
-  .arb-widget label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px;}
-  .arb-widget input{
-    width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:9px;
-    background:#fbfcfe;color:var(--text);font-size:15px;font-weight:600;font-family:inherit;
+  .field-total input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);background:#fff;}
+  .cell-input.text-left{text-align:left;}
+  .row-del{
+    background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;
+    padding:2px 6px;border-radius:6px;
   }
-  .arb-widget input:focus{outline:none;border-color:var(--blue);background:#fff;}
-  .arb-widget .arb-outcome{margin-bottom:12px;}
-  .arb-widget .arb-outcome-row{
-    display:flex;align-items:center;gap:10px;background:var(--card);padding:10px 12px;
-    border-radius:9px;margin-bottom:8px;border:1px solid var(--border);
-    flex-wrap:wrap;
+  .row-del:hover{background:#fdeceb;color:var(--red);}
+
+  .summary-banner{
+    margin-top:14px;padding:16px 18px;border-radius:14px;border:1px solid var(--border);
   }
-  .arb-widget .arb-outcome-row .arb-label{flex:1 1 120px;min-width:0;font-size:14px;color:var(--text);}
-  .arb-widget .arb-outcome-row .arb-odds-input{width:78px;flex:0 0 78px;}
-  .arb-widget .arb-btn{
-    width:100%;padding:12px;border:none;border-radius:9px;font-size:15px;font-weight:700;
-    cursor:pointer;transition:all .2s;font-family:inherit;
-  }
-  .arb-widget .arb-btn-primary{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(47,111,237,.28);}
-  .arb-widget .arb-btn-primary:hover{filter:brightness(1.08);}
-  .arb-widget .arb-btn-add{background:#fff;color:var(--navy);border:1px solid var(--border);margin-top:8px;font-size:13px;padding:9px;}
-  .arb-widget .arb-btn-remove{
-    background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;
-  }
-  .arb-widget .arb-btn-remove:hover{color:var(--red);}
-  .arb-widget .arb-result{margin-top:16px;}
-  .arb-widget .arb-summary{
-    display:flex;justify-content:space-between;align-items:center;padding:14px 16px;
-    border-radius:9px;margin-bottom:12px;font-size:15px;font-weight:700;
-  }
-  .arb-widget .arb-summary.profit{background:#e7f7ee;color:var(--green);}
-  .arb-widget .arb-summary.loss{background:#fdecea;color:var(--red);}
-  .arb-widget .arb-summary.neutral{background:var(--bg);color:var(--muted);}
-  .arb-widget .arb-alloc{
-    background:var(--bg);padding:12px;border-radius:9px;margin-bottom:8px;
-    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;
-    border:1px solid var(--border);
-  }
-  .arb-widget .arb-alloc .arb-lbl{font-size:13px;color:var(--muted);}
-  .arb-widget .arb-alloc .arb-amt{font-size:16px;font-weight:700;color:var(--navy);}
-  .arb-widget .arb-alloc-info{font-size:11px;color:var(--muted);margin-top:4px;}
-  .arb-widget .arb-export-btn{
-    margin-top:16px;width:100%;padding:10px;background:#fff;border:1px solid var(--border);border-radius:9px;
-    color:var(--navy);cursor:pointer;font-size:13px;font-weight:600;font-family:inherit;
-  }
-  .arb-widget .arb-export-btn:hover{background:var(--bg);}
-  .arb-widget .arb-note{text-align:center;font-size:12px;color:var(--muted);margin-top:16px;line-height:1.5;}
+  .summary-banner .verdict{font-size:15px;font-weight:800;margin-bottom:4px;}
+  .summary-banner .verdict-sub{font-size:12.5px;font-weight:500;}
+  .summary-banner .invers-line{font-size:12px;margin-top:8px;opacity:.75;font-weight:600;}
+  .summary-banner.profit{background:#e7f7ee;color:var(--green);border-color:#bfe8d1;}
+  .summary-banner.loss{background:#fdecea;color:var(--red);border-color:#f6c9c4;}
+  .summary-banner.neutral{background:var(--bg);color:var(--muted);}
+
+  .note-text{text-align:center;font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5;}
 
   @media (max-width: 768px){
     body{padding:16px 10px 40px;}
@@ -253,10 +219,8 @@
     input.cell-input{font-size:11px;padding:6px 3px;}
     .rw-card{padding:40px 20px;}
     .rw-card .rw-num{font-size:76px;}
-    .arb-widget{padding:16px;border-radius:14px;}
-    .arb-widget .arb-card{padding:14px;}
-    .arb-widget .arb-outcome-row .arb-label{flex-basis:100%;order:-1;}
-    .arb-widget .arb-outcome-row .arb-odds-input{flex:1 1 auto;}
+    .field-total{width:100%;}
+    .field-total input{width:100%;}
   }
 
   @media (max-width: 480px){
@@ -332,29 +296,47 @@
   <section id="panel-arb" class="tab-panel">
     <div class="panel-head">
       <h2>Kalkulator Arbitrase Betting</h2>
-      <p>Hitung proporsi taruhan berdasarkan odds untuk mengecek peluang arbitrase.</p>
+      <p>Nama &amp; Odds diisi manual. Kolom lain terhitung otomatis mengikuti Total Modal.</p>
     </div>
-    <div class="arb-widget">
-      <div class="arb-container">
-        <div class="arb-card">
-          <div class="arb-outcome">
-            <label>Total Modal (Rp)</label>
-            <input type="number" id="arbTotal" value="10000000" step="100000">
-          </div>
-          <label style="margin-bottom:8px">Daftar Odds</label>
-          <div id="arbOddsList"></div>
-          <button class="arb-btn arb-btn-add" id="arbAddBtn">+ Tambah Baris</button>
-          <div style="height:8px"></div>
-          <button class="arb-btn arb-btn-primary" id="arbHitungBtn">HITUNG</button>
-          <div class="arb-result" id="arbResult"></div>
-          <button class="arb-export-btn" id="arbExportBtn">⬇ Unduh Script (.html)</button>
-        </div>
-        <p class="arb-note">
-          Balik modal hanya jika total invers odds (1/odds) &lt; 1.00 (book 100%).<br>
-          Contoh: 1/4.70 + 1/2.83 + 1/2.05 = 1.054 → margin bandar 5.1%, tidak arbitrase.
-        </p>
+
+    <div class="toolbar">
+      <label class="field-total">
+        Total Modal (Rp)
+        <input type="text" inputmode="decimal" autocomplete="off" id="arbTotal" value="10000000">
+      </label>
+      <button class="btn-primary" id="arbAddBtn">+ Tambah Baris</button>
+      <span style="flex:1"></span>
+    </div>
+
+    <div class="card">
+      <div class="table-scroll">
+        <table>
+          <colgroup>
+            <col style="width:6%"><col style="width:26%"><col style="width:12%">
+            <col style="width:16%"><col style="width:20%"><col style="width:14%"><col style="width:6%">
+          </colgroup>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Outcome</th>
+              <th>Odds</th>
+              <th>Invers (1/Odds)</th>
+              <th>Proporsi Taruhan</th>
+              <th>Potensi Balik</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="arbTbody"></tbody>
+        </table>
       </div>
     </div>
+
+    <div class="summary-banner" id="arbBanner"></div>
+
+    <p class="note-text">
+      Balik modal hanya jika total invers odds (1/odds) &lt; 1.00 (book 100%).<br>
+      Contoh: 1/4.70 + 1/2.83 + 1/2.05 = 1.054 → margin bandar 5.1%, tidak arbitrase.
+    </p>
   </section>
 </div>
 
@@ -481,102 +463,127 @@ rwBtn.addEventListener('click', () => {
   }, 60);
 });
 
-/* ===== Arbitrase Betting ===== */
+/* ===== Arbitrase Betting (tabel, menyerupai Kotor/Bersih) ===== */
 let arbOutcomes = [
-  { label: 'Tim Kandang', odds: 0.00 },
-  { label: 'Tim Tandang', odds: 0.00 },
-  { label: 'DRAW', odds: 0.00 }
+  { label: 'Tim Kandang', odds: 4.70 },
+  { label: 'Tim Tandang', odds: 2.83 },
+  { label: 'Tidak ada', odds: 2.05 }
 ];
-function arbRenderOutcomes(){
-  const list = document.getElementById('arbOddsList');
-  list.innerHTML = '';
-  arbOutcomes.forEach((o, i) => {
-    const row = document.createElement('div');
-    row.className = 'arb-outcome-row';
-    row.innerHTML = `
-      <input type="text" value="${o.label}" class="arb-label" style="padding:8px 10px;border-radius:6px;font-size:13px;font-weight:400;min-width:110px;">
-      <input type="number" step="0.01" value="${o.odds}" class="arb-odds-input">
-      <button class="arb-btn-remove" title="Hapus">✕</button>
-    `;
-    const [labelInput, oddsInput] = row.querySelectorAll('input');
-    labelInput.addEventListener('input', e => arbOutcomes[i].label = e.target.value);
-    oddsInput.addEventListener('input', e => arbOutcomes[i].odds = parseFloat(e.target.value) || 0);
-    row.querySelector('.arb-btn-remove').addEventListener('click', () => arbRemoveOutcome(i));
-    list.appendChild(row);
-  });
-}
-function arbAddOutcome(){
-  arbOutcomes.push({ label: 'Outcome ' + (arbOutcomes.length + 1), odds: 1.9 });
-  arbRenderOutcomes();
-}
-function arbRemoveOutcome(i){
-  if(arbOutcomes.length <= 2){ alert('Minimal 2 odds'); return; }
-  arbOutcomes.splice(i, 1);
-  arbRenderOutcomes();
-}
+let arbTotal = 10000000;
+
+const arbTbody = document.getElementById('arbTbody');
+const arbTotalInput = document.getElementById('arbTotal');
+const arbBanner = document.getElementById('arbBanner');
+
 function arbFmt(n){
-  return 'Rp ' + n.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+  return 'Rp ' + Math.round(n).toLocaleString('id-ID');
 }
-function arbHitung(){
-  const total = parseFloat(document.getElementById('arbTotal').value) || 0;
-  const inv = arbOutcomes.map(o => 1 / o.odds);
+
+function arbSanitize(input){
+  let raw = input.value.replace(/[^0-9.,]/g, '').replace(',', '.');
+  const caret = input.selectionStart;
+  input.value = raw;
+  input.setSelectionRange(caret, caret);
+  return parseFloat(raw) || 0;
+}
+
+function arbCompute(){
+  const inv = arbOutcomes.map(o => (o.odds > 0 ? 1 / o.odds : 0));
   const sumInv = inv.reduce((a, b) => a + b, 0);
+  const arbitrase = sumInv > 0 && sumInv < 1;
+  const rows = arbOutcomes.map((o, i) => {
+    const proporsi = sumInv > 0 ? (inv[i] / sumInv) * arbTotal : 0;
+    const potensiBalik = o.odds * proporsi;
+    return { invers: inv[i], proporsi, potensiBalik };
+  });
+  return { inv, sumInv, arbitrase, rows };
+}
+
+function arbUpdateComputed(){
+  const { sumInv, arbitrase, rows } = arbCompute();
+  const trs = arbTbody.querySelectorAll('tr');
+  rows.forEach((res, i) => {
+    const tds = trs[i].querySelectorAll('td');
+    tds[3].textContent = res.invers.toFixed(4);
+    tds[4].textContent = arbFmt(res.proporsi);
+    tds[5].textContent = arbFmt(res.potensiBalik);
+  });
+
   const pct = sumInv * 100;
-  const arb = sumInv < 1;
-  let html = '';
-  const cls = arb ? 'profit' : (sumInv > 1.1 ? 'loss' : 'neutral');
-  const verdict = arb
+  const returnValue = sumInv > 0 ? arbTotal * (1 / sumInv) : 0;
+  const lossAmt = returnValue - arbTotal;
+  const cls = arbitrase ? 'profit' : (sumInv > 1.1 ? 'loss' : 'neutral');
+  const verdict = arbitrase
     ? `✓ ARBITRASE — Profit ${((1 / sumInv - 1) * 100).toFixed(2)}%`
     : '✗ Tidak arbitrase — rugi pasti';
-  const returnValue = total * (1 / sumInv);
-  const lossAmt = returnValue - total;
-  const verdictSub = arb
+  const verdictSub = arbitrase
     ? `Setiap hasil menang → ${arbFmt(returnValue)}`
     : `Dapat balik ${arbFmt(returnValue)} (rugi ${arbFmt(Math.abs(lossAmt))})`;
-  html += `<div class="arb-summary ${cls}">
-    <span>${verdict}</span>
-  </div>
-  <div class="arb-alloc" style="display:block">
-    <div style="display:flex;justify-content:space-between">
-      <span class="arb-lbl" style="font-size:13px">Total invers odds (book)</span>
-      <span style="font-weight:700;color:#fff">${sumInv.toFixed(4)} (${pct.toFixed(1)}%)</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-      <span class="arb-lbl" style="font-size:12px">${verdictSub}</span>
-    </div>
-  </div>
-  <div style="height:8px"></div>`;
-  html += `<label style="margin-bottom:6px">Proporsi Taruhan (balik modal)</label>`;
-  arbOutcomes.forEach((o, i) => {
-    const proporsi = sumInv > 0 ? (inv[i] / sumInv) * total : 0;
-    const potensiKembali = o.odds * proporsi;
-    html += `
-      <div class="arb-alloc">
-        <div>
-          <div class="arb-lbl">${o.label} <span style="color:#6b7280">(${o.odds})</span></div>
-          <div class="arb-alloc-info">balik ${arbFmt(potensiKembali)}</div>
-        </div>
-        <div class="arb-amt">${arbFmt(proporsi)}</div>
-      </div>`;
-  });
-  document.getElementById('arbResult').innerHTML = html;
-}
-function arbExportScript(){
-  const html = document.documentElement.outerHTML;
-  const blob = new Blob(['<!DOCTYPE html>\n' + html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'dashboard-kotor-bersih.html';
-  a.click();
-  URL.revokeObjectURL(url);
-}
-document.getElementById('arbAddBtn').addEventListener('click', arbAddOutcome);
-document.getElementById('arbHitungBtn').addEventListener('click', arbHitung);
-document.getElementById('arbExportBtn').addEventListener('click', arbExportScript);
 
-arbRenderOutcomes();
-arbHitung();
+  arbBanner.className = 'summary-banner ' + cls;
+  arbBanner.innerHTML = `
+    <div class="verdict">${verdict}</div>
+    <div class="verdict-sub">${verdictSub}</div>
+    <div class="invers-line">Total invers odds (book): ${sumInv.toFixed(4)} (${pct.toFixed(1)}%)</div>
+  `;
+}
+
+function arbRenderRows(){
+  arbTbody.innerHTML = '';
+  arbOutcomes.forEach((o, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="no-cell" data-label="No">${i + 1}</td>
+      <td data-label="Nama Outcome"><input class="cell-input text-left" type="text" autocomplete="off" data-idx="${i}" data-field="label" value="${o.label}"></td>
+      <td data-label="Odds"><input class="cell-input" type="text" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="odds" value="${o.odds}"></td>
+      <td class="val-satuan" data-label="Invers (1/Odds)"></td>
+      <td class="val-kotor" data-label="Proporsi Taruhan"></td>
+      <td class="val-bersih" data-label="Potensi Balik"></td>
+      <td><button class="row-del" type="button" title="Hapus baris">✕</button></td>
+    `;
+    arbTbody.appendChild(tr);
+  });
+
+  arbTbody.querySelectorAll('input[data-field="label"]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const idx = Number(e.target.dataset.idx);
+      arbOutcomes[idx].label = e.target.value;
+    });
+  });
+  arbTbody.querySelectorAll('input[data-field="odds"]').forEach(inp => {
+    inp.addEventListener('input', e => {
+      const idx = Number(e.target.dataset.idx);
+      arbOutcomes[idx].odds = arbSanitize(e.target);
+      arbUpdateComputed();
+    });
+    inp.addEventListener('wheel', e => e.target.blur());
+  });
+  arbTbody.querySelectorAll('.row-del').forEach((btn, i) => {
+    btn.addEventListener('click', () => arbRemoveOutcome(i));
+  });
+
+  arbUpdateComputed();
+}
+
+function arbAddOutcome(){
+  arbOutcomes.push({ label: 'Outcome ' + (arbOutcomes.length + 1), odds: 1.9 });
+  arbRenderRows();
+}
+function arbRemoveOutcome(i){
+  if(arbOutcomes.length <= 2){ alert('Minimal 2 baris odds diperlukan.'); return; }
+  arbOutcomes.splice(i, 1);
+  arbRenderRows();
+}
+
+arbTotalInput.addEventListener('input', e => {
+  arbTotal = arbSanitize(e.target);
+  arbUpdateComputed();
+});
+arbTotalInput.addEventListener('wheel', e => e.target.blur());
+
+document.getElementById('arbAddBtn').addEventListener('click', arbAddOutcome);
+
+arbRenderRows();
 </script>
 </body>
 </html>
