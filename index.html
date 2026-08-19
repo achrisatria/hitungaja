@@ -29,7 +29,7 @@
   }
   .wrap{max-width:1100px;margin:0 auto;}
 
-  .page-header{margin-bottom:20px;}
+  .page-header{margin-bottom:20px;text-align:center;}
   h1{font-size:21px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em;}
   .sub{color:var(--muted);font-size:13px;margin:0;}
 
@@ -73,7 +73,7 @@
   .tab-panel.active{display:block;}
   @keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
-  .panel-head{margin-bottom:14px;}
+  .panel-head{margin-bottom:14px;text-align:center;}
   .panel-head h2{font-size:16px;margin:0 0 3px;font-weight:800;color:var(--navy);}
   .panel-head p{margin:0;font-size:12.5px;color:var(--muted);}
 
@@ -82,6 +82,7 @@
     display:flex;
     gap:10px;
     align-items:center;
+    justify-content:center;
     margin-bottom:14px;
     flex-wrap:wrap;
   }
@@ -180,14 +181,14 @@
 
   /* ===== Arbitrase Betting (menyerupai tabel Kotor/Bersih) ===== */
   .field-total{
-    display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:600;
+    display:flex;align-items:center;justify-content:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:600;
   }
   .field-total input{
     width:170px;padding:9px 10px;border:1px solid var(--border);border-radius:9px;
     font-size:13px;text-align:right;font-family:inherit;background:#fbfcfe;
   }
   .field-total input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue);background:#fff;}
-  .cell-input.text-left{text-align:left;}
+  .cell-input.text-center{text-align:center;}
   .row-del{
     background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;
     padding:2px 6px;border-radius:6px;
@@ -195,7 +196,7 @@
   .row-del:hover{background:#fdeceb;color:var(--red);}
 
   .summary-banner{
-    margin-top:14px;padding:16px 18px;border-radius:14px;border:1px solid var(--border);
+    margin-top:14px;padding:16px 18px;border-radius:14px;border:1px solid var(--border);text-align:center;
   }
   .summary-banner .verdict{font-size:15px;font-weight:800;margin-bottom:4px;}
   .summary-banner .verdict-sub{font-size:12.5px;font-weight:500;}
@@ -227,6 +228,9 @@
     thead th{font-size:9.5px;padding:7px 3px;}
     tbody td{font-size:10px;padding:7px 3px;}
     input.cell-input{font-size:10px;padding:5px 2px;}
+    col.arb-invers{visibility:collapse;}
+    th.arb-invers, td.arb-invers{display:none;}
+    .row-del{font-size:14px;padding:4px 6px;}
   }
 </style>
 </head>
@@ -252,7 +256,6 @@
     <div class="toolbar">
       <button class="btn-primary" id="addRow">+ Tambah Baris</button>
       <button class="btn-ghost" id="resetRows">Reset ke 4 Baris</button>
-      <span style="flex:1"></span>
       <label class="toggle-wrap">
         <input type="checkbox" id="rupiahToggle" checked>
         Format Rupiah
@@ -305,7 +308,6 @@
         <input type="text" inputmode="decimal" autocomplete="off" id="arbTotal" value="10000000">
       </label>
       <button class="btn-primary" id="arbAddBtn">+ Tambah Baris</button>
-      <span style="flex:1"></span>
     </div>
 
     <div class="card">
@@ -313,14 +315,14 @@
         <table>
           <colgroup>
             <col style="width:6%"><col style="width:26%"><col style="width:12%">
-            <col style="width:16%"><col style="width:20%"><col style="width:14%"><col style="width:6%">
+            <col style="width:16%" class="arb-invers"><col style="width:20%"><col style="width:14%"><col style="width:6%">
           </colgroup>
           <thead>
             <tr>
               <th>No</th>
               <th>Nama Outcome</th>
               <th>Odds</th>
-              <th>Invers (1/Odds)</th>
+              <th class="arb-invers">Invers (1/Odds)</th>
               <th>Proporsi Taruhan</th>
               <th>Potensi Balik</th>
               <th></th>
@@ -467,7 +469,7 @@ rwBtn.addEventListener('click', () => {
 let arbOutcomes = [
   { label: 'Tim Kandang', odds: 4.70 },
   { label: 'Tim Tandang', odds: 2.83 },
-  { label: 'Draw', odds: 2.05 }
+  { label: 'Tidak ada', odds: 2.05 }
 ];
 let arbTotal = 10000000;
 
@@ -534,9 +536,9 @@ function arbRenderRows(){
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="no-cell" data-label="No">${i + 1}</td>
-      <td data-label="Nama Outcome"><input class="cell-input text-left" type="text" autocomplete="off" data-idx="${i}" data-field="label" value="${o.label}"></td>
+      <td data-label="Nama Outcome"><input class="cell-input text-center" type="text" autocomplete="off" data-idx="${i}" data-field="label" value="${o.label}"></td>
       <td data-label="Odds"><input class="cell-input" type="text" inputmode="decimal" autocomplete="off" data-idx="${i}" data-field="odds" value="${o.odds}"></td>
-      <td class="val-satuan" data-label="Invers (1/Odds)"></td>
+      <td class="val-satuan arb-invers" data-label="Invers (1/Odds)"></td>
       <td class="val-kotor" data-label="Proporsi Taruhan"></td>
       <td class="val-bersih" data-label="Potensi Balik"></td>
       <td><button class="row-del" type="button" title="Hapus baris">✕</button></td>
