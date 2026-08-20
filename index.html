@@ -178,6 +178,7 @@
   }
   .rw-card .rw-btn:hover{transform:translateY(-2px);filter:none;}
   .rw-card .rw-btn:disabled{opacity:.6;cursor:default;transform:none;}
+  .rw-card .rw-progress{margin-top:16px;font-size:11.5px;color:var(--muted);letter-spacing:.03em;}
 
   /* ===== Arbitrase Betting (menyerupai tabel Kotor/Bersih) ===== */
   .field-total{
@@ -285,12 +286,13 @@
   <section id="panel-acak" class="tab-panel">
     <div class="panel-head">
       <h2>Generator Angka Acak</h2>
-      <p>Menghasilkan satu angka acak antara 1 sampai 15.</p>
+      <p>Menghasilkan satu angka acak antara 1 sampai 15. Setiap 15 kali klik MULAI, tidak ada hasil yang sama.</p>
     </div>
     <div class="rw-card">
       <p class="rw-label">Angka Acak 1 - 15</p>
       <div class="rw-num" id="rwNum">-</div>
       <button class="rw-btn" id="rwBtn">MULAI</button>
+      <p class="rw-progress" id="rwProgress"></p>
     </div>
   </section>
 
@@ -448,6 +450,8 @@ render();
 /* ===== Angka Acak ===== */
 const rwBtn = document.getElementById('rwBtn');
 const rwNum = document.getElementById('rwNum');
+const rwProgress = document.getElementById('rwProgress');
+
 function rwSecureShuffle15(){
   const arr = Array.from({ length: 15 }, (_, i) => i + 1);
   for(let i = arr.length - 1; i > 0; i--){
@@ -458,13 +462,36 @@ function rwSecureShuffle15(){
   }
   return arr;
 }
+function rwFlash(){
+  const rand = new Uint32Array(1);
+  crypto.getRandomValues(rand);
+  return (rand[0] % 15) + 1;
+}
+
+let rwPool = [];
+function rwRefillPool(){ rwPool = rwSecureShuffle15(); }
+function rwUpdateProgress(){
+  rwProgress.textContent = `Sisa angka unik di batch ini: ${rwPool.length}/15`;
+}
+rwRefillPool();
+rwUpdateProgress();
+
 rwBtn.addEventListener('click', () => {
   rwBtn.disabled = true;
-  const sequence = rwSecureShuffle15();
-  let i = 0;
+  if(rwPool.length === 0) rwRefillPool();
+  const result = rwPool.pop();
+  rwUpdateProgress();
+
+  let ticks = 0;
   const timer = setInterval(() => {
-    rwNum.textContent = sequence[i];
-    if(++i >= sequence.length){ clearInterval(timer); rwBtn.disabled = false; }
+    ticks++;
+    if(ticks >= 15){
+      rwNum.textContent = result;
+      clearInterval(timer);
+      rwBtn.disabled = false;
+    } else {
+      rwNum.textContent = rwFlash();
+    }
   }, 60);
 });
 
